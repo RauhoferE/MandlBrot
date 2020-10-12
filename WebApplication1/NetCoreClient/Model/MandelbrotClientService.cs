@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using NetworkLibraryMandelBrot;
 using System.Drawing;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ClientApp
 {
@@ -28,8 +30,14 @@ namespace ClientApp
             var resp = await _httpClient.PostAsync("api/MandelBrot", content);
             resp.EnsureSuccessStatusCode();
             string newJson = await resp.Content.ReadAsStringAsync();
-            var pic = JsonConvert.DeserializeObject<Bitmap>(newJson);
-            return pic;
+            var answer = JsonConvert.DeserializeObject<MandelbrotBitMapAnswer>(newJson);
+            Bitmap c = null;
+            using (MemoryStream ms = new MemoryStream(answer.Picture))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                c = (Bitmap)bf.Deserialize(ms);
+            }
+            return c;
         }
     }
 }

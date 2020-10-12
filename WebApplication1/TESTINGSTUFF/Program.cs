@@ -20,7 +20,7 @@ namespace TESTINGSTUFF
 
         private static ConcurrentBag<(Tuple<int, int>, Color)> colorArray = new ConcurrentBag<(Tuple<int, int>, Color)>();
 
-       
+
 
         private static bool isComputed = false;
         private static object lk = new object();
@@ -43,7 +43,7 @@ namespace TESTINGSTUFF
             int startHeight = 0;
             for (int i = 0; i < 4; i++)
             {
-                await CalculateMandelbrotColor(0, startHeight, request.Width, startHeight + p2, request.Iteration);
+                await CalculateMandelbrotColor(0, startHeight, request.Width, startHeight + p2, request.Iteration, request.Height);
                 //startWidth = startWidth + p1;
                 startHeight = startHeight + p2;
             }
@@ -70,14 +70,15 @@ namespace TESTINGSTUFF
             return bm;
         }
 
-        private static async Task<bool> CalculateMandelbrotColor(int startWidth, int startHeight, int width, int height, int iteration)
+        private static async Task<bool> CalculateMandelbrotColor(int startWidth, int startHeight, int width, int height, int iteration, int realHight)
         {
             for (int k = startHeight; k < height; k++)
-                {
+            {
+
                 for (int i = startWidth; i < width; i++)
                 {
-                    Complex c = new Complex(RE_START + (i / width) * (RE_END - RE_START),
-                    IM_START + (k / height) * (IM_END - IM_START));
+                    Complex c = new Complex(RE_START + (Convert.ToDouble(i) / Convert.ToDouble(width)) * (RE_END - RE_START),
+                    IM_START + (Convert.ToDouble(k) / Convert.ToDouble(realHight)) * (IM_END - IM_START));
 
                     int m = CalculateMandelbrot(iteration, c);
 
@@ -93,11 +94,11 @@ namespace TESTINGSTUFF
                     }
                     var colorInt = 255 - (m * 255 / iteration);
 
-                    colorArray.Add((new Tuple<int, int>(i, k), Color.FromArgb(hue, 255,v)));
+                    colorArray.Add((new Tuple<int, int>(i, k), Color.FromArgb(hue, 255, v)));
                 }
             }
 
-            SetBool(startWidth);
+            SetBool(realHight * width);
 
             return true;
         }
@@ -107,25 +108,22 @@ namespace TESTINGSTUFF
             Complex z = 0;
             int n = 0;
 
-            while (Complex.Abs(z) <= 2 && n < iteration)
+            while ((Complex.Abs(z) <= 2) && (n < iteration))
             {
-                z = Complex.Add(Complex.Pow(z, z), c);
-                n += 1;
+                z = Complex.Add((z * z), c);
+                n = n + 1;
             }
             return n;
         }
 
-        private static void SetBool(int startWidth)
+        private static void SetBool(int colletionCount)
         {
-            Console.WriteLine("Finished");
-                Console.WriteLine(colorArray.Count);
-                if (colorArray.Count == 240000)
+            if (colorArray.Count == colletionCount)
+            {
+                lock (lk)
                 {
-                    lock (lk)
-                    {
-                        isComputed = true;
-                        Console.WriteLine(isComputed);
-                    }
+                    isComputed = true;
+                }
             }
         }
     }

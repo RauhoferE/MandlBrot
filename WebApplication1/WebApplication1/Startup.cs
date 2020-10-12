@@ -28,7 +28,7 @@ namespace WebApplication1
         {
             services.AddControllers();
             services.AddScoped<IMandelbrotService, MandelbrotService>();
-
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

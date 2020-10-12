@@ -8,6 +8,8 @@ using WebApplication1.Services;
 using System.Drawing;
 using NetworkLibraryMandelBrot;
 using Microsoft.Extensions.Logging;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace WebApplication1.Controllers
 {
@@ -54,7 +56,17 @@ namespace WebApplication1.Controllers
                 else
                 {
                     logger.LogInformation("Return Bitmap");
-                    return Ok(bm);
+                    MandelbrotBitMapAnswer bta = new MandelbrotBitMapAnswer();
+                    
+                    
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        bf.Serialize(ms, bm);
+                        bta.Picture = ms.ToArray();
+                    }
+                    return Ok(bta);
+                    
                 }
             }
             catch (Exception)
