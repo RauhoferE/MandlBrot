@@ -46,7 +46,7 @@ namespace NetCoreClient
             MandelBrotRequest mbr = new MandelBrotRequest();
             mbr.Height = 400;
             mbr.Width = 600;
-            mbr.Iteration = 80;
+            mbr.Iteration = 100;
             GetBitMapAsync(host, mbr);
         }
 

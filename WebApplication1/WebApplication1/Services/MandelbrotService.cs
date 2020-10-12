@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Threading;
+using WebApplication1.Helper;
 
 namespace WebApplication1.Services
 {
@@ -32,7 +33,6 @@ namespace WebApplication1.Services
 
         public async Task<Bitmap> GetMandelBrotBitmap(MandelBrotRequest request)
         {
-            List<Task<bool>> boolTaskList = new List<Task<bool>>();
             Bitmap bm = new Bitmap(request.Width, request.Height);
 
             int p2 = request.Height / 4;
@@ -61,7 +61,6 @@ namespace WebApplication1.Services
                 }
             }
 
-            //bm.Save("./pic.png", ImageFormat.Png);
             return bm;
         }
 
@@ -72,24 +71,15 @@ namespace WebApplication1.Services
 
                 for (int i = startWidth; i < width; i++)
                 {
+                    // Threadpool für jeden Punkt
+                    // Mit Countdown
                     Complex c = new Complex(RE_START + (Convert.ToDouble(i) / Convert.ToDouble(width)) * (RE_END - RE_START),
                     IM_START + (Convert.ToDouble(k) / Convert.ToDouble(realHight)) * (IM_END - IM_START));
 
                     int m = CalculateMandelbrot(iteration, c);
 
-                    int hue = 255 * m / iteration;
-                    int v;
-                    if (m > iteration)
-                    {
-                        v = 255;
-                    }
-                    else
-                    {
-                        v = 0;
-                    }
                     var colorInt = 255 - (m * 255 / iteration);
-
-                    colorArray.Add((new Tuple<int, int>(i, k), Color.FromArgb(colorInt, colorInt, colorInt)));
+                    colorArray.Add((new Tuple<int, int>(i, k), ColorHelper.Colors[m % ColorHelper.Colors.Count()]));
                 }
             }
 
@@ -119,6 +109,7 @@ namespace WebApplication1.Services
                 z = Complex.Add((z * z), c);
                 n = n + 1;
             }
+
             return n;
         }
     }
