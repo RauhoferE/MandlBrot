@@ -35,51 +35,13 @@ namespace NetCoreClient
         public MainWindow()
         {
             InitializeComponent();
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    services.AddHttpClient("mandelbrot", client =>
-                    {
-                        client.BaseAddress = new Uri("http://localhost:51318");
-                    }).AddTypedClient<MandelBrotClientService>();
-                }).Build();
-            MandelBrotRequest mbr = new MandelBrotRequest();
-            mbr.Height = 400;
-            mbr.Width = 600;
-            mbr.Iteration = 100;
-            GetBitMapAsync(host, mbr);
+            //MandelBrotRequest mbr = new MandelBrotRequest();
+            //mbr.Height = 400;
+            //mbr.Width = 600;
+            //mbr.Iteration = 100;
+            //GetBitMapAsync(host, mbr);
         }
 
-        public async Task GetBitMapAsync(IHost host, MandelBrotRequest request)
-        {
-
-            try
-            {
-                var service = host.Services.GetService<MandelBrotClientService>();
-                Bitmap bm = await service.GetMandelbrotBitmap(request);
-                this.image1.Source = BitmapToImageSource(bm);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                
-            }
-        }
-
-        BitmapImage BitmapToImageSource(Bitmap bitmap)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                memory.Position = 0;
-                BitmapImage bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
-
-                return bitmapimage;
-            }
-        }
+        
     }
 }

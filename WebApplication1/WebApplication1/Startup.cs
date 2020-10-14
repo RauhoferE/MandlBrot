@@ -27,7 +27,7 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<IMandelbrotService, MandelbrotService>();
+            services.AddScoped<IMandelbrotService, MandelbrotServiceV2>();
             
         }
 

@@ -76,6 +76,7 @@ namespace WebApplication1.Services
                     Complex c = new Complex(RE_START + (Convert.ToDouble(i) / Convert.ToDouble(width)) * (RE_END - RE_START),
                     IM_START + (Convert.ToDouble(k) / Convert.ToDouble(realHight)) * (IM_END - IM_START));
 
+
                     int m = CalculateMandelbrot(iteration, c);
 
                     var colorInt = 255 - (m * 255 / iteration);

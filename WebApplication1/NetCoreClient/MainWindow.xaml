@@ -5,10 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetCoreClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Mandelbrot Client" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainVM/>
+    </Window.DataContext>
     <Grid>
-        <Image Name="image1">
-            
-        </Image>
+        <TabControl Margin="5">
+            <TabItem Header="Settings" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="5">
+                        <Label Content="Iterations: "/>
+                        <TextBox Text="{Binding Iterrations}"/>
+                        <Label Content="Width: "/>
+                        <TextBox Text="{Binding Width}"/>
+                        <Label Content="Height: "/>
+                        <TextBox Text="{Binding Height}"/>
+                        <Button Command="{Binding SendToServer}" Content="Send to Server"/>
+                    </StackPanel>
+                    
+                </Grid>
+                
+            </TabItem>
+            <TabItem Header="Image" >
+                <Image Source="{Binding Result}"/>
+            </TabItem>
+        </TabControl>
+        
     </Grid>
 </Window>
