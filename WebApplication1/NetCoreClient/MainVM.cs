@@ -127,8 +127,8 @@ namespace NetCoreClient
                     mbr.Iteration = this.Iterrations;
                     
                     var host = await this.CreateHost();
-                    await GetBitMapAsync(host, mbr);
                     MessageBox.Show("Request successfully send to client!");
+                    await GetBitMapAsync(host, mbr);
                 });
             }
         }
@@ -153,6 +153,7 @@ namespace NetCoreClient
                 var service = host.Services.GetService<MandelBrotClientService>();
                 Bitmap bm = await service.GetMandelbrotBitmap(request);
                 this.Result = BitmapToImageSource(bm);
+                MessageBox.Show("Success");
             }
             catch (Exception e)
             {

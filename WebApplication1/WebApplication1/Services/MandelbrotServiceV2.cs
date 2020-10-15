@@ -85,7 +85,7 @@ namespace WebApplication1.Services
                 n = n + 1;
             }
 
-            var colorInt = 255 - (n * 255 / iteration);
+            //var colorInt = 255 - (n * 255 / iteration);
             colorArray.Add((new Tuple<int, int>(x, y), ColorHelper.Colors[n % ColorHelper.Colors.Count()]));
             countdown.Signal();
         }
